@@ -5,6 +5,8 @@ BasicGraphicsProgramming
 
 - [参考：Basic Graphics Programming With The Xlib Library](https://osiris.df.unipi.it/~moruzzi/xlib-programming.html#xlib_compile)
 
+- [参考：Basic Graphics Programming With The Xlib Library PDF版本 ](https://ftp.dim13.org/pub/doc/Xlib.pdf)
+
 - [参考：Xlib基础图形编程](https://blog.csdn.net/arag2009/article/details/18408113)
 
 XlibTutorial 
