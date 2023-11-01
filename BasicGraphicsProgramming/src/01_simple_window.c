@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
   /* flush all pending requests to the X server, and wait until */
   /* they are processed by the X server.                        */
 
-	/* 1. 强制处理之前所有发送到服务器（display）的请求 
+	/* 1. 强制处理之前所有发送到服务器（display）的请求，并且等待所有事件处理完成才返回。
 	 * 2. discard: 是一个布尔值。如果设置为True，那么此函数还会清除所有尚未处理的事件。
 	 *             如果设置为False，则不会丢弃这些事件。
 	 * 3.注意：过度使用XSync可能会导致程序效率降低，因为它会中断程序和服务器之间的通信流，
@@ -79,17 +79,12 @@ int main(int argc, char* argv[])
 	 */
   //XSync(display, False); /* 缺少同步函数则不会显示窗口 */
 
+  /**
+   * 函数的主要目的是将任何还未发送到X server的缓冲区中的命令强制发送出去。
+   * 这意味着，如果有任何挂起的请求（例如创建窗口、绘图操作等），
+   * 它们会被立即发送到X server，但不会等待这些命令被执行。
+  */
 	XFlush(display);
-
-	// XSelectInput(display, win, ButtonPressMask | ExposureMask);
-	// XEvent ev;
-	// while (1) {
-	// 	XNextEvent(display, &ev);
-	// 	switch(ev.type) {
-	// 		case ButtonPress:
-	// 			exit(0);
-	// 	}
-	// }
 
   /* make a delay for a short period. */
   sleep(4);
