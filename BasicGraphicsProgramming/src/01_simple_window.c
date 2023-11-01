@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
 	XFlush(display);
 
   /* make a delay for a short period. */
-  sleep(4);
+  while(1);
 
   /* close the connection to the X server. */
   XCloseDisplay(display);
