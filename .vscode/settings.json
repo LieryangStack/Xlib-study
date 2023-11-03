@@ -6,7 +6,8 @@
     "glib-object.h": "c",
     "gobject.h": "c",
     "glib.h": "c",
-    "xlib.h": "c"
+    "xlib.h": "c",
+    "condition_variable": "c"
   },
   "C_Cpp_Runner.msvcBatchPath": "",
   "C_Cpp_Runner.cCompilerPath": "gcc",

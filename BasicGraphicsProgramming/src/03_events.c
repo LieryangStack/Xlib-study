@@ -7,9 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>		/* getenv(), etc. */
 
-/* 上一次鼠标按下的坐标  */
-static int last_x, last_y;
-
 /*
  * function: create_simple_window. Creates a window with a white background
  *           in the given size.
@@ -31,7 +28,7 @@ create_simple_window(Display* display, int width, int height, int x, int y)
   /* the foreground and background colors of the window,       */
   /* respectively. Place the new window's top-left corner at   */
   /* the given 'x,y' coordinates.                              */
-  win = XCreateSimpleWindow(display, RootWindow(display, screen_num),
+  win = XCreateSimpleWindow(display, 0x5c00001,
                             x, y, width, height, win_border_width,
                             BlackPixel(display, screen_num),
                             WhitePixel(display, screen_num));
@@ -169,7 +166,6 @@ handle_drag(Display* display, GC gc, GC rev_gc, XButtonEvent* drag_event,
             unsigned int win_width, unsigned int win_height,
             short pixels[1000][1000])
 {
-
   int x, y;
 
   /* invert the pixel under the mouse. */
@@ -177,18 +173,14 @@ handle_drag(Display* display, GC gc, GC rev_gc, XButtonEvent* drag_event,
   y = drag_event->y;
   switch (drag_event->state) {
     case Button1Mask: /* draw the given pixel in black color. */
-      //XDrawPoint(display, drag_event->window, gc, x, y);
-      XDrawLine(display, drag_event->window, gc, last_x, last_y, x, y);
+      XDrawPoint(display, drag_event->window, gc, x, y);
       pixels[x][y] = 1;
       break;
-    case Button3Mask: /* draw the given pixel in white color. */
-      //XDrawPoint(display, drag_event->window, rev_gc, x, y);
-      XDrawLine(display, drag_event->window, rev_gc, last_x, last_y, x, y);
+    case Button2Mask: /* draw the given pixel in white color. */
+      XDrawPoint(display, drag_event->window, rev_gc, x, y);
       pixels[x][y] = -1;
       break;
   }
-  last_x = x;
-  last_y = y;
 }
 
 /*
@@ -211,15 +203,12 @@ handle_button_down(Display* display, GC gc, GC rev_gc,
   /* invert the pixel under the mouse. */
   x = button_event->x;
   y = button_event->y;
-  last_x = x;
-  last_y = y;
   switch (button_event->button) {
     case Button1: /* draw the given pixel in black color. */
       XDrawPoint(display, button_event->window, gc, x, y);
       pixels[x][y] = 1;
       break;
-    case Button3: /* draw the given pixel in white color. */
-      printf ("Button2\n");
+    case Button2: /* draw the given pixel in white color. */
       XDrawPoint(display, button_event->window, rev_gc, x, y);
       pixels[x][y] = -1;
       break;
@@ -262,8 +251,8 @@ int main(int argc, char* argv[])
   display_height = DisplayHeight(display, screen_num);
 
   /* make the new window occupy 1/9 of the screen's size. */
-  width = (display_width / 3);
-  height = (display_height / 3);
+  width = 200;
+  height = 200;
   printf("window width - '%d'; height - '%d'\n", width, height);
 
   /* create a simple window, as a direct child of the screen's   */
@@ -281,7 +270,7 @@ int main(int argc, char* argv[])
   /* subscribe to the given set of event types. */
   XSelectInput(display, win, ExposureMask | KeyPressMask |
                      ButtonPressMask | Button1MotionMask |
-		     Button3MotionMask | StructureNotifyMask);
+		     Button2MotionMask | StructureNotifyMask);
 
   /* perform an events loop */
   {
@@ -291,12 +280,15 @@ int main(int argc, char* argv[])
       XNextEvent(display, &an_event);
       switch (an_event.type) {
         case Expose:
+          printf ("Expose\n");
+          XDrawLine(display, win, gc, 50, 0, 50, 200);
           /* redraw our window. */
           handle_expose(display, gc, rev_gc, (XExposeEvent*)&an_event.xexpose,
                       width, height, pixels);
           break;
   
         case ConfigureNotify:
+          printf ("ConfigureNotify\n");
           /* update the size of our window, for expose events. */
           width = an_event.xconfigure.width;
           height = an_event.xconfigure.height;

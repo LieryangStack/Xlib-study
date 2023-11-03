@@ -96,7 +96,7 @@ int main(int argc, char* argv[])
 				/*  in our window.			     */
 
   /* open connection with the X server. */
-  display = XOpenDisplay(display_name);
+  display = XOpenDisplay(":2");
   if (display == NULL) {
     fprintf(stderr, "%s: cannot connect to X server '%s'\n",
             argv[0], display_name);

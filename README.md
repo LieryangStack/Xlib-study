@@ -13,3 +13,6 @@ XlibTutorial
 
 - [参考：Xlib tutorial part](http://xopendisplay.hilltopia.ca/2009/Jan/Xlib-tutorial-part-1----Beginnings.html)
 
+Extension：对于上面两部分学习后，根据自己的使用需求，进行扩展总结
+
+- []()

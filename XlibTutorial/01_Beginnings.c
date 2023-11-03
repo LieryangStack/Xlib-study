@@ -14,7 +14,7 @@ int main(int argc, char ** argv){
 	Display *dpy;
 
 	/* First connect to the display server */
-	dpy = XOpenDisplay(":1");
+	dpy = XOpenDisplay(NULL);
 	if (!dpy) {fprintf(stderr, "unable to connect to display\n");return 7;}
 
 	/* these are macros that pull useful data out of the display object */
@@ -23,8 +23,8 @@ int main(int argc, char ** argv){
 	background = BlackPixel(dpy, screen_num);
 	border = WhitePixel(dpy, screen_num);
 
-	width = 400; /* start with a small window */
-	height = 400;
+	width = 40; /* start with a small window */
+	height = 40;
 
 	win = XCreateSimpleWindow(dpy, DefaultRootWindow(dpy), /* display, parent */
 		0,0, /* x, y: the window manager will place the window elsewhere */
