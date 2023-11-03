@@ -15,4 +15,6 @@ XlibTutorial
 
 Extension：对于上面两部分学习后，根据自己的使用需求，进行扩展总结
 
+- [Linux系统管理技术手册——第25章 X窗口系统](https://blog.csdn.net/github_39312212/article/details/127589389)
+
 - []()
