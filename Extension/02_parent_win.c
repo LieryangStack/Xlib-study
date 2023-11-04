@@ -76,7 +76,7 @@ int main(int argc, char ** argv){
 		XNextEvent(dpy, &ev);
 		switch(ev.type){
 		case Expose:
-			forwardEventToChildren(dpy, win, &ev);
+			//forwardEventToChildren(dpy, win, &ev);
 			XDrawLine(dpy, win, pen, 0, 0, width, height);
 			XDrawLine(dpy, win, pen, width, 0, 0, height);
 			printf("Expose changed to: %d by %d\n", width, height);

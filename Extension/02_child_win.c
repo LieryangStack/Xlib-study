@@ -17,7 +17,7 @@
  *           the window is automatically mapped after its creation.
  */
 Window
-create_simple_window(Display* display, int width, int height, int x, int y)
+create_simple_window(Display* display, Window parent_id, int width, int height, int x, int y)
 {
   int screen_num = DefaultScreen(display);
   int win_border_width = 2;
@@ -28,7 +28,7 @@ create_simple_window(Display* display, int width, int height, int x, int y)
   /* the foreground and background colors of the window,       */
   /* respectively. Place the new window's top-left corner at   */
   /* the given 'x,y' coordinates.                              */
-  win = XCreateSimpleWindow(display, 0x5c00001,
+  win = XCreateSimpleWindow(display, parent_id,
                             x, y, width, height, win_border_width,
                             BlackPixel(display, screen_num),
                             WhitePixel(display, screen_num));
@@ -215,11 +215,12 @@ handle_button_down(Display* display, GC gc, GC rev_gc,
   }
 }
 
-int main(int argc, char* argv[])
-{
+int 
+main(int argc, char* argv[]) {
+
   Display* display;		/* pointer to X Display structure.           */
   int screen_num;		/* number of screen to place the window on.  */
-  Window win;			/* pointer to the newly created window.      */
+  Window win, parent_win;			/* pointer to the newly created window.      */
   unsigned int display_width,
                display_height;	/* height and width of the X display.        */
   unsigned int width, height;	/* height and width for the new window.      */
@@ -228,6 +229,16 @@ int main(int argc, char* argv[])
 				/*  in our window.			     */
   short pixels[1000][1000];	/* used to store pixels on screen that were  */
 				/* explicitly drawn or erased by the user.   */
+
+  if (argc != 2) {
+    fprintf(stderr, "Usage: %s WIN_ID\n", argv[0]);
+    return 1;
+  }
+
+  if (sscanf(argv[1], "%lx", &parent_win) != 1) {
+    fprintf(stderr, "Error: Invalid hex number\n");
+    return 1;
+  }
 
   /* initialize the 'pixels' array to contain 0 values. */
   {
@@ -259,7 +270,7 @@ int main(int argc, char* argv[])
   /* root window. Use the screen's white color as the background */
   /* color of the window. Place the new window's top-left corner */
   /* at the given 'x,y' coordinates.                             */
-  win = create_simple_window(display, width, height, 0, 0);
+  win = create_simple_window(display, parent_win, width, height, 0, 0);
 
   /* allocate two new GCs (graphics contexts) for drawing in the window. */
   /* the first is used for drawing black over white, the second is used  */
