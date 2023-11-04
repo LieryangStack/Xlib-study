@@ -31,6 +31,7 @@ main(int argc, char* argv[]) {
   unsigned int win_x, win_y;	/* win显示窗口的坐标*/
   unsigned int win_border_width; /* win显示窗口边界宽度 */
   char *display_name = getenv("DISPLAY");  /* 获取环境变量DISPLAY的值 */
+  XEvent ev;
 
 	/**
    * 1. display命名规范 hostname:display_number.screen_number
@@ -73,7 +74,9 @@ main(int argc, char* argv[]) {
                             BlackPixel(display, screen_num),
                             WhitePixel(display, screen_num));
 
-  
+  /* 设定接受事件类型 */
+  XSelectInput(display, win, ButtonPressMask|StructureNotifyMask );
+
   XMapWindow(display, win); /* 缺少映射到窗口函数，则不会显示 */
 
 	/* 1. 强制处理之前所有发送到服务器（display）的请求，并且等待所有事件处理完成才返回。
@@ -91,10 +94,22 @@ main(int argc, char* argv[]) {
   */
 	XFlush(display);
 
-  /* make a delay for a short period. */
-  sleep(4);
-
-  /* close the connection to the X server. */
-  XCloseDisplay(display);
+  while(1){
+    /* XNextEvent 是一个阻塞函数 */
+    XNextEvent(display, &ev);
+    switch(ev.type){
+    case ConfigureNotify:
+      if (width != ev.xconfigure.width
+          || height != ev.xconfigure.height) {
+        width = ev.xconfigure.width;
+        height = ev.xconfigure.height;
+        printf("Size changed to: %d by %d\n", width, height);
+      }
+      break;
+    case ButtonPress:
+      XCloseDisplay(display);
+      return 0;
+  }
+}
   return(0);
 }
