@@ -28,7 +28,7 @@ create_simple_window(Display* display, int width, int height, int x, int y)
   /* the foreground and background colors of the window,       */
   /* respectively. Place the new window's top-left corner at   */
   /* the given 'x,y' coordinates.                              */
-  win = XCreateSimpleWindow(display, 0x5c00001,
+  win = XCreateSimpleWindow(display, RootWindow(display, screen_num),
                             x, y, width, height, win_border_width,
                             BlackPixel(display, screen_num),
                             WhitePixel(display, screen_num));
