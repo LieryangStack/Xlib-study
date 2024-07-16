@@ -97,19 +97,19 @@ main(int argc, char* argv[]) {
   while(1){
     /* XNextEvent 是一个阻塞函数 */
     XNextEvent(display, &ev);
-    switch(ev.type){
-    case ConfigureNotify:
-      if (width != ev.xconfigure.width
-          || height != ev.xconfigure.height) {
-        width = ev.xconfigure.width;
-        height = ev.xconfigure.height;
-        printf("Size changed to: %d by %d\n", width, height);
-      }
-      break;
-    case ButtonPress:
-      XCloseDisplay(display);
-      return 0;
+    switch(ev.type) {
+      case ConfigureNotify:
+        if (width != ev.xconfigure.width
+            || height != ev.xconfigure.height) {
+          width = ev.xconfigure.width;
+          height = ev.xconfigure.height;
+          printf("Size changed to: %d by %d\n", width, height);
+        }
+        break;
+      case ButtonPress:
+        XCloseDisplay(display);
+        return 0;
+    }
   }
-}
   return(0);
 }
